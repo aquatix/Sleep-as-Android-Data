@@ -23,7 +23,7 @@ def read(filename):
 
 def export(data, filename):
   with open(filename, 'wb') as csvfile:
-    w = csv.DictWriter(csvfile,['date','weekday','start_time','end_time','length','cycles','deep'])
+    w = csv.DictWriter(csvfile,['date','weekday','start_time','end_time','length','lenadjust','netlength','cycles','deep'])
     w.writeheader()
     w.writerows(data)
 
@@ -39,6 +39,8 @@ def parse_sleep(row):
   sleep['start_time'] = start.strftime('%Y-%m-%d %H:%M')
   sleep['end_time'] = end.strftime('%Y-%m-%d %H:%M')
   sleep['length'] = (end - start).total_seconds() / 3600
+  sleep['lenadjust'] = int(row[13])
+  sleep['netlength'] = ((end - start).total_seconds() + (sleep['lenadjust'] * 60)) / 3600
   sleep['cycles'] = int(row[11])
   sleep['deep'] = float(row[12])
   return sleep
